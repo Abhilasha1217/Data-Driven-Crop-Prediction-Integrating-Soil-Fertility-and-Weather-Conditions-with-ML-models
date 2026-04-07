@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crop Recommendation</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* 🌾 Background Image */
+        body {
+            background: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef") no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial;
+        }
+
+        /* 🌙 Dark overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: -1;
+        }
+
+        /* Card Styling */
+        .card {
+            border-radius: 20px;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background-color: #1e7e34;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card p-4">
+
+                <h2 class="text-center mb-4">🌾 Crop Recommendation System</h2>
+
+                <form action="/predict" method="post">
+
+                    <!-- State Dropdown -->
+                    <div class="mb-3">
+                        <label>State</label>
+                        <select name="state" class="form-control">
+                            {% for s in states %}
+                            <option>{{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- NPK -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label>N</label>
+                            <input name="N" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label>P</label>
+                            <input name="P" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label>K</label>
+                            <input name="K" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Climate -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label>Temperature</label>
+                            <input name="temp" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label>Rainfall</label>
+                            <input name="rainfall" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label>pH</label>
+                            <input name="ph" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-custom px-4">Predict</button>
+                    </div>
+
+                </form>
+
+                <!-- Result -->
+                {% if crop %}
+                <div class="result-box text-center">
+                    <h4>🌱 Recommended Crop: <b>{{ crop }}</b></h4>
+                    <h4>📈 Expected Yield: <b>{{ yield_val }}</b></h4>
+                </div>
+
+                <!-- Graph -->
+                <div class="text-center mt-4">
+                    <img src="{{ url_for('static', filename='graph.png') }}" class="img-fluid rounded">
+                </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
